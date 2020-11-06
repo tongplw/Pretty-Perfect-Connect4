@@ -29,6 +29,9 @@ def get_score(game):
     k = ''.join(map(str, game.board.ravel().tolist()))
     if k in d:
         return d[k]
+    k2 = ''.join(map(str, game.board[:,::-1].ravel().tolist()))
+    if k2 in d:
+        return d[k2]
     score = 0
     gcc = game.column_counts
     # horizontal
@@ -59,7 +62,7 @@ def get_score(game):
             space = (4*r-6) - np.sum(x)
             score += evaluate_score(values, space)
     d[k] = score
-    pd.DataFrame([[k, score]]).to_csv('cache.csv', mode='a', header=False)
+    pd.DataFrame([[k, score]]).to_csv('cache.csv', mode='a', header=False, index=False)
     return score
 
 def evaluate_score(array, space=0):
