@@ -6,6 +6,12 @@ from scipy.signal import convolve2d
 
 class Connect4:
     
+    horizontal_kernel = np.array([[1, 1, 1, 1]])
+    vertical_kernel = np.transpose(horizontal_kernel)
+    diag1_kernel = np.eye(4, dtype=np.uint8)
+    diag2_kernel = np.fliplr(diag1_kernel)
+    kernels = [horizontal_kernel, vertical_kernel, diag1_kernel, diag2_kernel]
+    
     def __init__(self, game=None):
         self.height = 6
         self.width = 7
@@ -29,6 +35,7 @@ class Connect4:
     
     def play_turn(self, column, is_human=True):
         if column < 0 or column > self.width - 1:
+            print(self.board, column)
             print('Invalid Column')
             return
 
@@ -43,13 +50,7 @@ class Connect4:
         self.turn = 3 - self.turn
     
     def check_win(self):
-        horizontal_kernel = np.array([[1, 1, 1, 1]])
-        vertical_kernel = np.transpose(horizontal_kernel)
-        diag1_kernel = np.eye(4, dtype=np.uint8)
-        diag2_kernel = np.fliplr(diag1_kernel)
-        kernels = [horizontal_kernel, vertical_kernel, diag1_kernel, diag2_kernel]
-        
-        for kernel in kernels:
+        for kernel in Connect4.kernels:
             if (convolve2d(self.board == self.turn, kernel, mode="valid") == 4).any():
                 self.game_over = True
                 self.winner = self.turn
@@ -102,8 +103,24 @@ class Connect4:
                 self.play_turn(best_move, is_human=False)
                 self.print_board()
         print(f'Player {self.winner} Won!')
+    
+    def perfect_bot_with_perfect_bot(self):
+        while not self.game_over:
+            if self.turn == 1:
+                print('Perfect Bot 1 Turn')
+                best_move = perfect_bot.get_perfect_move(self, cache=True)
+                self.play_turn(best_move, is_human=False)
+                self.print_board()
+            else:
+                print('Perfect Bot 2 Turn')
+                best_move = perfect_bot.get_perfect_move(self, cache=False)
+                self.play_turn(best_move, is_human=False)
+                self.print_board()
+        print(f'Player {self.winner} Won!')
 
 if __name__ == '__main__':
-    game = Connect4()
-    # game.play_with_perfect_bot()
-    game.test_bot()
+    for i in range(10):
+        game = Connect4()
+        # game.play_with_perfect_bot()
+        # game.test_bot()
+        game.perfect_bot_with_perfect_bot()

@@ -2,11 +2,24 @@ import time
 import random
 import requests
 import numpy as np
+import pandas as pd
 
 URL = 'http://connect4.ist.tugraz.at:8080/moveinfo'
 
-def get_perfect_move(game):
+df = pd.read_csv('perfect_cache.csv')
+d = df.set_index('k').to_dict()['v']
+
+def get_perfect_move(game, cache=False):
     board = game.board
+    
+    if cache:
+        k = ''.join(map(str, board.ravel().tolist()))
+        if k in d:
+            return d[k]
+        k2 = ''.join(map(str, board[:,::-1].ravel().tolist()))
+        if k2 in d:
+            return 6 - d[k2]
+
     board = np.array(board[::-1], dtype=object)
     board[board == 0] = "e"
     board[board == 1] = "a"
@@ -17,12 +30,12 @@ def get_perfect_move(game):
         'board': board,
         'player': 'a' if game.turn == 1 else 'b',
         'timestamp': int(time.time() * 1000),
-        'uuid': 'ccaf01f4-be3f-ccac-a99c-fefbf46e7fff'
+        'uuid': '40c9b1c5-29db-2e35-5b68-053b6e468d7f'
     }
 
     r = requests.post(URL, data=data)
     move_info = r.json()['moveInfos']
-
+    
     best_val = 999
     best_col = -1
     
@@ -58,4 +71,8 @@ def get_perfect_move(game):
     if len(res_cols) > 0:
         best_col = random.choice(res_cols)
 
+    if cache:
+        d[k] = best_col
+        pd.DataFrame([[k, best_col]]).to_csv('perfect_cache.csv', mode='a', header=False, index=False)
+    
     return best_col
