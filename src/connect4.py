@@ -1,8 +1,10 @@
-import bot
-import perfect_bot
+import time
 import numpy as np
-from scipy.signal import convolve2d
 
+from . import bot
+from . import perfect_bot
+from . import offline_perfect_bot
+from scipy.signal import convolve2d
 
 class Connect4:
     
@@ -116,11 +118,19 @@ class Connect4:
                 best_move = perfect_bot.get_perfect_move(self, cache=False)
                 self.play_turn(best_move, is_human=False)
                 self.print_board()
+            time.sleep(1)
         print(f'Player {self.winner} Won!')
 
-if __name__ == '__main__':
-    for i in range(10):
-        game = Connect4()
-        # game.play_with_perfect_bot()
-        # game.test_bot()
-        game.perfect_bot_with_perfect_bot()
+    def demo(self):
+        while not self.game_over:
+            if self.turn == 1:
+                print('Bot Turn')
+                best_move = offline_perfect_bot.get_perfect_move(self)
+                self.play_turn(best_move, is_human=False)
+                self.print_board()
+            else:
+                print('Player')
+                column = int(input('Enter column to insert piece: '))
+                self.play_turn(column)
+                self.print_board()
+        print(f'Player {self.winner} Won!')

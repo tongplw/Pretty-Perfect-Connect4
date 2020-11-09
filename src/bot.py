@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('cache.csv')
+df = pd.read_csv('data/cache.csv')
 d = df.set_index('k').to_dict()['v']
 
 def run(game):

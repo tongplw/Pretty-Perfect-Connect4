@@ -6,7 +6,7 @@ import pandas as pd
 
 URL = 'http://connect4.ist.tugraz.at:8080/moveinfo'
 
-df = pd.read_csv('perfect_cache.csv')
+df = pd.read_csv('data/perfect_cache.csv')
 d = df.set_index('k').to_dict()['v']
 
 def get_perfect_move(game, cache=False):
@@ -30,7 +30,7 @@ def get_perfect_move(game, cache=False):
         'board': board,
         'player': 'a' if game.turn == 1 else 'b',
         'timestamp': int(time.time() * 1000),
-        'uuid': '40c9b1c5-29db-2e35-5b68-053b6e468d7f'
+        'uuid': '4bbaa912-4247-6492-bee5-2f7d527e81ff'
     }
 
     r = requests.post(URL, data=data)
@@ -73,6 +73,6 @@ def get_perfect_move(game, cache=False):
 
     if cache:
         d[k] = best_col
-        pd.DataFrame([[k, best_col]]).to_csv('perfect_cache.csv', mode='a', header=False, index=False)
+        pd.DataFrame([[k, best_col]]).to_csv('data/perfect_cache.csv', mode='a', header=False, index=False)
     
     return best_col
