@@ -15,8 +15,6 @@ def run(game):
     print('miss')
 
     out = minimax(game, 7, -float('inf'), float('inf'), True)[1]
-    # d[k] = out
-    # pd.DataFrame([[k, out]]).to_csv('cache.csv', mode='a', header=False, index=False)
     return out
 
 def minimax(game, depth, alpha, beta, player):
@@ -73,8 +71,6 @@ def get_score(game):
             x = np.minimum(gcc[c:c+4], [game.height-r-i for i in range(4)])
             space = 4*(game.height-r)-6 - np.sum(x)
             score += evaluate_score(values, space)
-    # d[k] = score
-    # pd.DataFrame([[k, score]]).to_csv('cache.csv', mode='a', header=False, index=False)
     return score
 
 def evaluate_score(array, space=0):
