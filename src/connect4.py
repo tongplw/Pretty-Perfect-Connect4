@@ -118,14 +118,14 @@ class Connect4:
                 best_move = perfect_bot.get_perfect_move(self, cache=False)
                 self.play_turn(best_move, is_human=False)
                 self.print_board()
-            time.sleep(1)
         print(f'Player {self.winner} Won!')
 
-    def demo(self):
+    def demo_bot(self):
         while not self.game_over:
             if self.turn == 1:
                 print('Bot Turn')
-                best_move = offline_perfect_bot.get_perfect_move(self)
+                best_move = bot.run(self)
+                # best_move = offline_perfect_bot.get_perfect_move(self)
                 self.play_turn(best_move, is_human=False)
                 self.print_board()
             else:

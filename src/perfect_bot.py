@@ -30,7 +30,7 @@ def get_perfect_move(game, cache=False):
         'board': board,
         'player': 'a' if game.turn == 1 else 'b',
         'timestamp': int(time.time() * 1000),
-        'uuid': '4bbaa912-4247-6492-bee5-2f7d527e81ff'
+        'uuid': '966b700d-9340-aeaf-a1a7-9332bd1e1116'
     }
 
     r = requests.post(URL, data=data)

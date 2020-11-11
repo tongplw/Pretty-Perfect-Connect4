@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('data/cache.csv')
+df = pd.read_csv('data/perfect_cache.csv')
 d = df.set_index('k').to_dict()['v']
 
 def run(game):
@@ -11,10 +11,12 @@ def run(game):
     k2 = ''.join(map(str, game.board[:,::-1].ravel().tolist()))
     if k2 in d:
         return 6 - d[k2]
+    
+    print('miss')
 
-    out = minimax(game, 9, -float('inf'), float('inf'), True)[1]
-    d[k] = out
-    pd.DataFrame([[k, out]]).to_csv('cache.csv', mode='a', header=False, index=False)
+    out = minimax(game, 7, -float('inf'), float('inf'), True)[1]
+    # d[k] = out
+    # pd.DataFrame([[k, out]]).to_csv('cache.csv', mode='a', header=False, index=False)
     return out
 
 def minimax(game, depth, alpha, beta, player):
@@ -36,12 +38,12 @@ def terminal_state(game):
     return 0, None
 
 def get_score(game):
-    # k = ''.join(map(str, game.board.ravel().tolist()))
-    # if k in d:
-    #     return d[k]
-    # k2 = ''.join(map(str, game.board[:,::-1].ravel().tolist()))
-    # if k2 in d:
-    #     return d[k2]
+    k = ''.join(map(str, game.board.ravel().tolist()))
+    if k in d:
+        return d[k]
+    k2 = ''.join(map(str, game.board[:,::-1].ravel().tolist()))
+    if k2 in d:
+        return d[k2]
     score = 0
     gcc = game.column_counts
     # horizontal

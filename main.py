@@ -5,8 +5,8 @@ if __name__ == '__main__':
         try:
             game = Connect4()
             # game.play_with_perfect_bot()
-            # game.test_bot()
             game.perfect_bot_with_perfect_bot()
-            # game.demo()
         except:
             pass
+        # game.test_bot()
+        # game.demo_bot()
